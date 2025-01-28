@@ -6,20 +6,15 @@ import com.amazonaws.util.IOUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
-
-import static org.apache.hadoop.hbase.util.Bytes.toByteArrays;
 
 @Service @Slf4j
 public class AWSS3Respository {
+
     @Value("${aws.s3.bucket}")
     private  String bucketName;
 

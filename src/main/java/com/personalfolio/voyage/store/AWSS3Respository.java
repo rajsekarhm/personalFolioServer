@@ -3,6 +3,7 @@ package com.personalfolio.voyage.store;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.personalfolio.voyage.multiFormat.ImageContentDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,18 +44,23 @@ public class AWSS3Respository {
         }
     }
 
-    public ArrayList<byte[]> getAllContent(String bucketName){
+    public ArrayList<ImageContentDTO> getAllContent(String bucketName){
+        ArrayList<ImageContentDTO> dtoList = new ArrayList<>();
         try {
             List<byte[]> imageKeys = new ArrayList<>();
             ObjectListing s3Object = s3Client.listObjects(bucketName);
             for(S3ObjectSummary objectSummary : s3Object.getObjectSummaries()){
+                ImageContentDTO dto = new ImageContentDTO();
                 String key = objectSummary.getKey();
+                dto.setUniqueIdName(key);
                 if (key.endsWith(".png") || key.endsWith(".jpg") || key.endsWith(".jpeg") || key.endsWith(".gif")) {
                     S3Object s3Objectbyte = s3Client.getObject(bucketName, key);
-                    imageKeys.add(IOUtils.toByteArray(s3Objectbyte.getObjectContent()));
+                    dto.setContent(IOUtils.toByteArray(s3Objectbyte.getObjectContent()));
+//                  imageKeys.add(IOUtils.toByteArray(s3Objectbyte.getObjectContent()));
+                    dtoList.add(dto);
                 }
             }
-            return (ArrayList<byte[]>)imageKeys;
+            return  dtoList;
         } catch (IOException e) {
             throw new RuntimeException("Failed to download file from S3", e);
         }

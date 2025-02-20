@@ -1,5 +1,6 @@
 package com.personalfolio.voyage.request;
 
+import com.personalfolio.voyage.multiFormat.ImageContentDTO;
 import com.personalfolio.voyage.store.AWSS3Respository;
 import com.personalfolio.voyage.utils.ResponseSchema;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class StoreHandler {
     }
 
     @GetMapping("getAllContent/{bucketName}")
-    public ResponseEntity<ArrayList<byte[]>> getAllContent(@PathVariable  String bucketName){
+    public ResponseEntity<ArrayList<ImageContentDTO>> getAllContent(@PathVariable  String bucketName){
         return  ResponseEntity.ok(awss3Respository.getAllContent(bucketName));
     }
 }
